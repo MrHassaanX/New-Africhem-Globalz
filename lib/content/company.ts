@@ -25,7 +25,9 @@ export const clientContent = {
     { title: "Deliver", description: "Freight, documentation and customs clearance, managed to your date." },
   ],
   network: {
+    primaryCountry: "India",
     countries: ["Kuwait", "UAE", "China", "Algeria", "Egypt", "Uganda", "Kenya"],
+    overview: "India, with partners on the ground in Kuwait, UAE, China, Algeria, Egypt, Uganda and Kenya.",
     summary: "Partners on the ground in Kuwait, UAE, China, Algeria, Egypt, Uganda and Kenya.",
     support: "For any query, at any stage, there is a real person to ask.",
     detail: "You are never left chasing answers across time zones, because international trade runs on someone being there.",

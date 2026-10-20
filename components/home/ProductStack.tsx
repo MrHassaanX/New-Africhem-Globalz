@@ -5,7 +5,7 @@ import Link from "next/link";
 import { clientContent } from "@/lib/content/company";
 
 const chapters = [
-  { title: clientContent.pillars[0].title, description: clientContent.pillars[0].description, image: "/materials/liquid-glass.webp", alt: "Macro study of folded translucent blue liquid glass" },
+  { title: clientContent.pillars[0].title, description: clientContent.pillars[0].description, image: "/stock/industrial-refinery.webp", alt: "Industrial refinery and transfer infrastructure, shown for context" },
   { title: "Solvents", description: clientContent.chemicalFocus.application + ".", image: "/materials/mineral-crystal.webp", alt: "Macro study of warm translucent crystalline material" },
   { title: clientContent.chemicalFocus.namedMaterials.join(" & "), description: "Confirmed materials for paints and coatings enquiries.", image: "/materials/industrial-fluid.webp", alt: "Macro study of industrial metal and deep blue fluid" },
 ] as const;
@@ -63,7 +63,7 @@ export function ProductStack() {
       <div className="stack-content">
         <div className="stack-card-top"><span>{String(index + 1).padStart(2, "0")} / 03</span></div>
         <div><h3>{chapter.title}</h3><p className="stack-description">{chapter.description}</p></div>
-        <Link className="stack-card-link" href="/products">Explore <span aria-hidden="true">↗</span></Link>
+        <Link className="stack-card-link" href="/categories/chemicals">Explore <span aria-hidden="true">↗</span></Link>
       </div>
     </article>)}</div>
   </div>;

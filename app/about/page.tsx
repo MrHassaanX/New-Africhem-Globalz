@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { clientContent } from "@/lib/content/company";
 import { ProcessRows } from "@/components/content/ProcessRows";
 import { PillarRows } from "@/components/content/PillarRows";
@@ -30,6 +31,8 @@ export default function AboutPage() {
       <div className="about-story-main"><h2 id="about-story-title">Why we<br />started.</h2><div>{clientContent.story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></div>
     </section>
 
+    <figure className="about-context-image wrap"><div><Image src="/stock/port-logistics.webp" alt="Port cranes and vessels at dusk, illustrating international logistics" fill sizes="(max-width: 767px) 100vw, 90vw" /></div><figcaption>Illustrative industry photography · Global logistics</figcaption></figure>
+
     <section className="about-strengths" aria-labelledby="about-strengths-title"><div className="wrap">
       <div className="about-section-head"><p className="about-section-index">02 / WHY CHOOSE US</p><h2 id="about-strengths-title">The work<br /><span>behind the word.</span></h2></div>
       <ol className="about-strength-list">{clientContent.whyChooseUs.map((item, index) => <li key={item.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3><p>{item.description}</p></li>)}</ol>
@@ -44,8 +47,8 @@ export default function AboutPage() {
 
     <section className="about-network" aria-labelledby="about-network-title"><div className="wrap">
       <div className="about-section-head"><p className="about-section-index">04 / OUR GLOBAL NETWORK</p><h2 id="about-network-title">People on<br /><span>the ground.</span></h2></div>
-      <div className="about-network-copy"><p>{clientContent.network.summary}</p><p>{clientContent.network.support} {clientContent.network.detail}</p></div>
-      <ul className="about-country-list">{clientContent.network.countries.map((country) => <li key={country}>{country}</li>)}</ul>
+      <div className="about-network-copy"><p>{clientContent.network.overview}</p><p>{clientContent.network.support} {clientContent.network.detail}</p></div>
+      <ul className="about-country-list"><li className="about-country-primary">India · Primary country</li>{clientContent.network.countries.map((country) => <li key={country}>{country}</li>)}</ul>
       <Link className="about-text-link" href="/global-reach">Explore Global Reach <span aria-hidden="true">↗</span></Link>
     </div></section>
 

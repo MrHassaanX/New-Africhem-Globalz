@@ -4,8 +4,9 @@ import { Component, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useReducedMotion } from "motion/react";
 import { clientContent } from "@/lib/content/company";
+import { networkLocations } from "@/lib/globe/locations";
 
-const GlobeScene = dynamic(() => import("./GlobeScene"), { ssr: false, loading: () => <div className="globe-fallback" /> });
+const GlobeScene = dynamic(() => import("./GlobeScene"), { ssr: false, loading: () => null });
 
 class GlobeBoundary extends Component<{ children: React.ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -16,10 +17,18 @@ class GlobeBoundary extends Component<{ children: React.ReactNode }, { failed: b
 export function GlobalReachGlobe() {
   const journey = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const sideCopy = useRef<HTMLDivElement>(null);
+  const intro = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
+  const [painted, setPainted] = useState(false);
   const [active, setActive] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
   const reducedMotion = Boolean(useReducedMotion());
+
+  useEffect(() => {
+    const onPaint = () => setPainted(true);
+    window.addEventListener("africhem-globe-ready", onPaint);
+    return () => window.removeEventListener("africhem-globe-ready", onPaint);
+  }, []);
 
   useEffect(() => {
     const element = stage.current;
@@ -37,7 +46,7 @@ export function GlobalReachGlobe() {
   }, []);
 
   useEffect(() => {
-    if (reducedMotion || !journey.current || !stage.current || !sideCopy.current) return;
+    if (reducedMotion || !journey.current || !intro.current) return;
     let disposed = false;
     let revert: (() => void) | undefined;
     let responsive: { add: (query: string, callback: () => void) => unknown; revert: () => void } | undefined;
@@ -47,21 +56,16 @@ export function GlobalReachGlobe() {
       gsap.registerPlugin(ScrollTrigger);
       const context = gsap.context(() => {
         responsive = gsap.matchMedia();
-        responsive.add("(min-width: 1024px)", () => {
-          gsap.fromTo(stage.current, { scale: .86, yPercent: 9 }, {
-            scale: 1, yPercent: 0, ease: "none",
-            scrollTrigger: { trigger: journey.current, start: "top bottom", end: "top top", scrub: .7 },
-          });
-          gsap.to(stage.current, { xPercent: -10, ease: "none", scrollTrigger: { trigger: journey.current, start: "top top", end: "bottom bottom", scrub: .8 } });
-          gsap.fromTo(sideCopy.current, { opacity: 0, y: 34 }, {
-            opacity: 1, y: 0, ease: "none", scrollTrigger: { trigger: journey.current, start: "top 85%", end: "top 35%", scrub: .5 },
-          });
-        });
-        responsive.add("(min-width: 768px) and (max-width: 1023px)", () => {
-          gsap.fromTo(stage.current, { scale: .94, yPercent: 4 }, {
-            scale: 1, yPercent: 0, ease: "none",
-            scrollTrigger: { trigger: journey.current, start: "top bottom", end: "top top", scrub: .5 },
-          });
+        responsive.add("(min-width: 768px)", () => {
+          const timeline = gsap.timeline({ scrollTrigger: {
+            trigger: journey.current,
+            start: "top top",
+            end: () => `+=${Math.round(Math.min(window.innerHeight * .52, 520))}`,
+            scrub: .65,
+            invalidateOnRefresh: true,
+          } });
+          timeline.to(intro.current, { opacity: 0, y: -45, ease: "none", duration: .5 }, 0);
+          timeline.to(stage.current, { xPercent: () => window.innerWidth < 1100 ? -50 : -46.153846, ease: "none", duration: .8 }, .2);
         });
       }, journey.current);
       revert = () => { responsive?.revert(); context.revert(); };
@@ -70,18 +74,23 @@ export function GlobalReachGlobe() {
     return () => { disposed = true; revert?.(); };
   }, [reducedMotion]);
 
-  return <section className="reach-globe-journey" ref={journey} id="network-globe" aria-label="Interactive globe of partner locations">
+  return <section className="reach-globe-journey" ref={journey} id="network-globe" aria-labelledby="reach-title">
     <div className="reach-globe-sticky">
-      <div className="reach-globe-meta"><span>01 / PARTNERS ON THE GROUND</span><span>DRAG TO EXPLORE ↔</span></div>
+      <div className="reach-globe-meta"><span>AFRICHEM GLOBALZ / GLOBAL REACH</span><span>DRAG TO EXPLORE ↔</span></div>
+      <div className="reach-globe-intro" ref={intro}>
+        <p>INDIA / SEVEN INTERNATIONAL PARTNER COUNTRIES</p>
+        <h1 id="reach-title">GLOBAL<br /><span>REACH.</span></h1>
+        <strong>{clientContent.network.overview}</strong>
+        <span className="reach-globe-cue">Explore the network <span aria-hidden="true">↔</span></span>
+      </div>
       <div ref={stage} className="reach-globe-stage globe-stage">
         <div className="globe-atmosphere" aria-hidden="true" />
-        {ready ? <GlobeBoundary><GlobeScene active={active} reducedMotion={reducedMotion} /></GlobeBoundary> : <div className="globe-fallback" role="img" aria-label="Illustrated Earth" />}
+        {!painted && <div className="globe-fallback" role="img" aria-label="Illustrated Earth" />}
+        {ready && <GlobeBoundary><GlobeScene active={active} reducedMotion={reducedMotion} onSelectionChange={setSelected} /></GlobeBoundary>}
       </div>
-      <div className="reach-globe-sidecopy" ref={sideCopy}>
-        <p>SEVEN COUNTRIES. ONE POINT OF CONTACT.</p>
-        <strong>{clientContent.network.support}</strong>
+      <div className="reach-globe-hud">
+        <div className="globe-selection" aria-live="polite">{selected === null ? "SELECT A POINT TO EXPLORE" : <><span>{networkLocations[selected].primary ? "PRIMARY COUNTRY · LAST EXPLORED" : "PARTNER COUNTRY · LAST EXPLORED"}</span><strong>{networkLocations[selected].name}</strong></>}</div>
       </div>
-      <p className="reach-globe-caption">Points mark partner countries. Red arcs illustrate a connected network, not verified shipping routes or Africhem offices.</p>
     </div>
   </section>;
 }

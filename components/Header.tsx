@@ -21,6 +21,7 @@ export function Header() {
   const trigger = useRef<HTMLButtonElement>(null);
   const header = useRef<HTMLElement>(null);
   const dark = useSyncExternalStore(subscribe, getTheme, serverTheme);
+  const isActive = (href: string) => pathname === href || (href === "/categories" && pathname.startsWith("/categories/"));
   function unlock() { document.documentElement.removeAttribute("data-menu-open"); window.dispatchEvent(new CustomEvent("africhem-menu", { detail: false })); }
   function open() { dialog.current?.showModal(); document.documentElement.dataset.menuOpen = "true"; window.dispatchEvent(new CustomEvent("africhem-menu", { detail: true })); }
   function close() { dialog.current?.close(); unlock(); trigger.current?.focus(); }
@@ -47,7 +48,7 @@ export function Header() {
       <Image src="/africhem-logo.png" alt="AFRICHEM GLOBALZ" width={1041} height={271} sizes="(max-width: 600px) 145px, 190px" priority />
     </Link>
     <nav className="desktop-nav" aria-label="Main navigation">{navigation.map(item =>
-      <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>
+      <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</Link>
     )}</nav>
     <div className="header-actions">
       <button className="theme-button" onClick={toggleTheme} aria-label={dark ? "Switch to light theme" : "Switch to dark theme"} aria-pressed={dark}><span aria-hidden="true">{dark ? "☼" : "◐"}</span></button>
@@ -59,7 +60,7 @@ export function Header() {
         <div className="menu-top"><span>AFRICHEM GLOBALZ</span><button onClick={close} aria-label="Close navigation" autoFocus>Close ×</button></div>
         <nav aria-label="Mobile navigation">{navigation.map((item, i) =>
           <m.div key={item.href} whileHover={{ x: 5 }} transition={{ duration: .2 }}>
-            <Link href={item.href} onClick={close} aria-current={pathname === item.href ? "page" : undefined}><span>0{i + 1}</span>{item.label}<span aria-hidden="true">↗</span></Link>
+            <Link href={item.href} onClick={close} aria-current={isActive(item.href) ? "page" : undefined}><span>0{i + 1}</span>{item.label}<span aria-hidden="true">↗</span></Link>
           </m.div>
         )}</nav>
         <p>Chemical sourcing, trading<br />and distribution.</p>
@@ -67,4 +68,3 @@ export function Header() {
     </dialog>
   </header>;
 }
-

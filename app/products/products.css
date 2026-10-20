@@ -49,7 +49,13 @@
 .products-card-art[data-visual="10"] { background: radial-gradient(ellipse at 20% 25%, #a3cfc267, transparent 35%), radial-gradient(ellipse at 70% 70%, #3d98a2a6, transparent 38%), linear-gradient(30deg, #03121f, #205366 55%, #071824); }
 .products-card-art[data-visual="10"]::before { content: ""; position: absolute; width: 125%; aspect-ratio: 1; left: -25%; top: -35%; border-radius: 50%; border: 1px solid #c3ebe454; box-shadow: inset 35px 25px 80px #95d4cb33, 0 0 0 42px #a2ddd413, 0 0 0 85px #a2ddd40a; transform: skew(-12deg, 8deg); }
 
-.products-deck.is-stacked { height: 730svh; padding-bottom: 0; }
+.products-deck[data-category] .products-card-art { background: linear-gradient(145deg, #0e4053, #071b2b); }
+.products-deck[data-category="footwear"] .products-card-art { background: linear-gradient(145deg, #174858, #091f2f); }
+.products-deck[data-category="agro"] .products-card-art { background: linear-gradient(145deg, #155766, #082634); }
+.products-deck[data-category="recycling"] .products-card-art { background: linear-gradient(145deg, #12505a, #091e2b); }
+.products-deck[data-category] .products-card-art .category-art { inset: 0; opacity: .9; mask-image: none; }
+.products-deck[data-category] .products-card[data-status="awaiting-confirmation"] .products-card-art .category-art { opacity: .72; }
+.products-deck.is-stacked { height: calc(var(--deck-count) * 73svh); padding-bottom: 0; }
 .products-deck.is-stacked .products-deck-stage { position: sticky; top: max(96px, calc((100svh - var(--deck-card-height) - 48px) / 2)); height: calc(var(--deck-card-height) + 48px); padding-top: 24px; overflow: hidden; }
 .products-deck.is-stacked .products-card { position: absolute; inset: 24px 0 auto; width: 100%; margin: 0; }
 
@@ -65,7 +71,7 @@
   .products-hero-copy { grid-column: 8 / 13; }
   .products-card-content { padding: clamp(26px, 3.5vw, 38px); }
   .products-card-top span:last-child { max-width: 12ch; text-align: right; }
-  .products-deck.is-stacked { height: 568svh; }
+  .products-deck.is-stacked { height: calc(var(--deck-count) * 56.8svh); }
 }
 
 @media (max-width: 767px) {

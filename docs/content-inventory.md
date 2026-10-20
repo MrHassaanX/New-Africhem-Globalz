@@ -112,6 +112,8 @@ Other archived About wording to consider during Phase 4:
 
 ## Route and page inventory
 
+Current implementation note (16 October 2026): product browsing now lives under `/categories` and `/categories/[slug]`. The legacy `/products` URL permanently redirects to `/categories`. The table below records the earlier archive plan for provenance and is not the current public navigation.
+
 | New route | New page role | Archived reference |
 | --- | --- | --- |
 | `/` | Home | Main old site was `/home`; archive `/` is a Coming Soon screen. The new brief moves Home to `/`. |

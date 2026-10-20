@@ -92,15 +92,35 @@ h1, h2 { font-family: var(--font-display), Arial, sans-serif; font-weight: 450; 
 .footer-name span { font-size: 13px; font-weight: 400; letter-spacing: .45em; }
 .footer-top p { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
 .email-link { font-size: clamp(15px, 1.6vw, 24px); letter-spacing: -.035em; overflow-wrap: anywhere; }
+.social-links { display: flex; align-items: center; gap: 6px; margin-top: 22px; }
+.social-link { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); color: var(--ink); transition: color .25s, border-color .25s, transform .25s; }
+.social-link:hover { color: var(--cyan); border-color: var(--cyan); transform: translateY(-2px); }
 .footer-bottom { border-top: 1px solid var(--line); padding-top: 24px; display: flex; justify-content: space-between; gap: 25px; color: var(--muted); font-size: 11px; }
 .footer-bottom nav { display: flex; gap: 25px; }
-.route-foundation { padding-top: 35px; padding-bottom: var(--section-space-xl); min-height: 70vh; }
+.route-foundation { padding-top: 35px; padding-bottom: var(--section-space-lg); }
 .route-foundation h1 { font-size: var(--type-page-hero); line-height: .98; letter-spacing: -.055em; margin-block: var(--section-space-sm); max-width: 18ch; text-wrap: balance; }
 .route-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding-block: 35px 65px; border-top: 1px solid var(--line); }
 .route-detail h2 { font-size: var(--type-subsection); line-height: 1.08; letter-spacing: -.04em; max-width: 16ch; }
 .route-detail p { font-size: var(--type-body); line-height: 1.65; color: var(--muted); max-width: 38ch; }
 .route-detail .text-link { overflow-wrap: anywhere; max-width: 100%; }
 .contact-methods { display: grid; justify-items: start; gap: 12px; }
+.contact-page { padding-top: 34px; padding-bottom: var(--section-space-xl); }
+.contact-hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 50px; align-items: end; padding-block: clamp(24px, 2.5vw, 42px) clamp(40px, 4vw, 62px); }
+.contact-hero h1 { margin: 0; font: 530 var(--type-page-hero)/.94 var(--font-display), sans-serif; letter-spacing: -.065em; }
+.contact-hero p { max-width: 36ch; margin: 0 0 8px; color: var(--muted); font-size: var(--type-body-large); line-height: 1.55; }
+.contact-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(40px, 8vw, 140px); padding-top: 27px; border-top: 1px solid var(--line); }
+.contact-intro > p { margin: 0 0 35px; color: var(--cyan); font-size: 11px; font-weight: 650; letter-spacing: .12em; }
+.contact-intro h2 { margin: 0 0 25px; font: 470 var(--type-section)/1 var(--font-display), sans-serif; letter-spacing: -.06em; }
+.contact-intro > span { display: block; max-width: 32ch; color: var(--muted); font-size: var(--type-body); line-height: 1.6; }
+.contact-channel-list { border-top: 1px solid var(--line); }
+.contact-channel { display: grid; grid-template-columns: 44px minmax(0,1fr) 18px; align-items: center; gap: 18px; min-height: 93px; border-bottom: 1px solid var(--line); transition: color .25s; }
+.contact-channel:hover { color: var(--cyan); }
+.contact-channel-icon { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); }
+.contact-channel-copy { display: grid; gap: 4px; min-width: 0; }
+.contact-channel-copy small { color: var(--cyan); font-size: 10px; font-weight: 650; letter-spacing: .13em; }
+.contact-channel-copy strong { font: 450 clamp(17px, 1.65vw, 25px)/1.2 var(--font-display), sans-serif; letter-spacing: -.03em; overflow-wrap: anywhere; }
+.contact-channel-arrow { font-size: 20px; }
+.contact-platform-note { max-width: 65ch; margin: 35px 0 0 auto; color: var(--muted); font-size: 12px; line-height: 1.55; }
 .back-link { font-size: 13px; }
 .route-enter { animation: route-enter .4s var(--ease) both; }
 @keyframes route-enter { from { opacity: .4; transform: translateY(8px); } to { opacity: 1; transform: none; } }
@@ -151,6 +171,16 @@ h1, h2 { font-family: var(--font-display), Arial, sans-serif; font-weight: 450; 
   .footer-bottom nav { width: 100%; }
   .route-detail { grid-template-columns: 1fr; gap: 15px; }
   .route-foundation h1 { margin-block: 45px; overflow-wrap: anywhere; }
+  .contact-page { padding-top: 16px; }
+  .contact-hero { display: block; padding-block: 38px 44px; }
+  .contact-hero h1 { font-size: clamp(52px, 12vw, 78px); }
+  .contact-hero p { margin-top: 30px; font-size: 17px; }
+  .contact-grid { display: block; }
+  .contact-intro { margin-bottom: 44px; }
+  .contact-intro > p { margin-bottom: 20px; }
+  .contact-intro h2 { font-size: clamp(43px, 10vw, 58px); }
+  .contact-channel { gap: 12px; min-height: 82px; }
+  .contact-platform-note { margin-top: 24px; }
   .review-label { font-size: 9px; }
 }
 @media(max-width: 374px) {

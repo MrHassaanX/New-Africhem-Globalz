@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { clientContent } from "@/lib/content/company";
 import { HomeIntro } from "./HomeIntro";
-import { ProductStack } from "./ProductStack";
+import { CategoryCarousel } from "@/components/categories/CategoryCarousel";
 import { ProcessRows } from "@/components/content/ProcessRows";
 import "@/app/home.css";
 
@@ -21,10 +21,10 @@ export function HomePage() {
       </section>
     </HomeIntro>
 
-    <section className="home-products" aria-labelledby="products-title">
-      <div className="home-section-heading home-container"><p className="home-kicker">PRODUCTS</p><div><h2 id="products-title">Start with<br />the <em>material.</em></h2><p>A useful sourcing conversation begins with the material, its requirements and the information behind it.</p></div></div>
-      <ProductStack />
-      <div className="home-products-tail home-container"><p>{clientContent.pillars[0].description} Specifications and availability are confirmed through an enquiry.</p><Link href="/products">Explore Products <span aria-hidden="true">↗</span></Link></div>
+    <section className="home-categories" aria-labelledby="categories-title">
+      <div className="home-section-heading home-container"><p className="home-kicker">CATEGORIES</p><div><h2 id="categories-title">Explore our<br /><em>categories.</em></h2><p>Four business areas, from chemicals and footwear to Uganda agro-exports and recycling.</p></div></div>
+      <CategoryCarousel label="Home category preview" />
+      <div className="home-categories-tail home-container"><p>Start with the category that matches your requirement.</p><Link href="/categories">Explore Categories <span aria-hidden="true">↗</span></Link></div>
     </section>
 
     <section className="home-closing" aria-labelledby="closing-title"><div className="home-container home-closing-inner">

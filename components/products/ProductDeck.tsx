@@ -1,11 +1,28 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ProductPosition } from "@/lib/catalogue";
+import type { CategoryVisual } from "@/lib/categories";
+import { CategoryArtwork } from "@/components/categories/CategoryArtwork";
 
-export function ProductDeck({ products }: { products: readonly ProductPosition[] }) {
+const enquiryTopics = [
+  { title: "Start with your brief.", description: "Share the material or product you have in mind." },
+  { title: "Tell us the details.", description: "Let us know which requirements matter most." },
+  { title: "Explore the range.", description: "Ask our team what information is currently available." },
+  { title: "Check availability.", description: "We can confirm current options in conversation." },
+  { title: "Discuss your timing.", description: "Share your target date with our team." },
+  { title: "Request information.", description: "Further product details are available on enquiry." },
+  { title: "Let's talk specifics.", description: "Bring your questions and we'll work through them." },
+] as const;
+
+export function ProductDeck({ products, label = "Products catalogue", categoryLabel, categoryVisual }: {
+  products: readonly ProductPosition[];
+  label?: string;
+  categoryLabel?: string;
+  categoryVisual?: CategoryVisual;
+}) {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -71,23 +88,24 @@ export function ProductDeck({ products }: { products: readonly ProductPosition[]
     return () => { disposed = true; revert?.(); };
   }, []);
 
-  return <section className="products-deck" ref={root} aria-label="Products catalogue">
+  return <section className="products-deck" ref={root} aria-label={label} data-category={categoryVisual}
+    style={{ "--deck-count": products.length } as CSSProperties}>
     <ol className="products-deck-stage">
       {products.map((product, index) => {
         const named = product.status === "name-verified";
         return <li className="products-card" data-status={product.status} key={product.id}>
           <div className="products-card-art" data-visual={index + 1}>
-            {product.image && <Image src={product.image} alt="" fill sizes="(max-width: 767px) 92vw, 50vw" loading={index === 0 ? "eager" : "lazy"} />}
-            <span className="products-art-caption">ILLUSTRATIVE MATERIAL STUDY</span>
+            {product.image ? <Image src={product.image} alt="" fill sizes="(max-width: 767px) 92vw, 50vw" loading={index === 0 ? "eager" : "lazy"} /> : categoryVisual && <CategoryArtwork visual={categoryVisual} />}
+            <span className="products-art-caption">{product.image?.startsWith("/stock/") || (!product.image && categoryVisual) ? "ILLUSTRATIVE INDUSTRY PHOTOGRAPH" : "ILLUSTRATIVE MATERIAL STUDY"}</span>
           </div>
           <div className="products-card-content">
-            <div className="products-card-top"><span className="products-card-number">{String(index + 1).padStart(2, "0")} / 10</span><span>{named ? "SOLVENTS" : "CATALOGUE POSITION"}</span></div>
+            <div className="products-card-top"><span className="products-card-number">{String(index + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}</span><span>{named ? product.category.toUpperCase() : categoryLabel?.toUpperCase() ?? "PRODUCTS & MATERIALS"}</span></div>
             <div className="products-card-main">
-              <p className="products-card-status">{named ? "CONFIRMED MATERIAL" : "DETAILS AWAITING CONFIRMATION"}</p>
-              <h2>{named ? product.name : `Product ${String(index + 1).padStart(2, "0")}`}</h2>
-              <p className="products-card-description">{named ? product.shortDescription : "Catalogue details being prepared."}</p>
+              <p className="products-card-status">{named ? "PRODUCT IN FOCUS" : "ENQUIRE ABOUT THE RANGE"}</p>
+              <h2>{named ? product.name : enquiryTopics[index % enquiryTopics.length].title}</h2>
+              <p className="products-card-description">{named ? product.shortDescription : enquiryTopics[index % enquiryTopics.length].description}</p>
             </div>
-            <Link className="products-card-link" href="/contact">{named ? "Enquire about this product" : "Send an Enquiry"}<span aria-hidden="true">↗</span></Link>
+            <Link className="products-card-link" href="/contact">{named ? "Enquire about this product" : "Ask about this range"}<span aria-hidden="true">↗</span></Link>
           </div>
         </li>;
       })}

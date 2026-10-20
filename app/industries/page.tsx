@@ -19,8 +19,8 @@ export default function IndustriesPage() {
 
     <section className="pillars-list-section" id="pillar-list" aria-label="Business pillars"><div className="wrap">
       <div className="pillars-section-head"><p>01 / OUR PILLARS</p><h2>What we<br /><span>work across.</span></h2></div>
-      <PillarRows listClassName="pillars-list" rowClassName="pillars-row" />
-      <p className="pillars-note">For product specifications, availability or a particular requirement, speak with our team directly.</p>
+      <PillarRows listClassName="pillars-list" rowClassName="pillars-row" showImages />
+      <p className="pillars-note">Industry photographs are illustrative and do not depict Africhem-owned facilities or confirmed Walkmate models. For specifications or availability, speak with our team directly.</p>
     </div></section>
 
     <section className="pillars-close wrap"><p>START WITH YOUR REQUIREMENT</p><div><h2>Let&apos;s talk<br /><span>specifics.</span></h2><Link href="/contact">Contact Africhem <span aria-hidden="true">↗</span></Link></div></section>
