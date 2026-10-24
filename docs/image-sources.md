@@ -16,3 +16,5 @@ These photographs are illustrative stock imagery. They do not depict Africhem Gl
 The supplied Unsplash examples were considered during selection. The Pexels alternatives gave the site a consistent set of licensed, locally optimizable photographs with no prominent third-party branding in the final crops.
 
 The Home hero uses a still photograph because the available licensed industrial clips either showed a different process or required a multi-megabyte download for a short loop. The still preserves a realistic industrial setting without implying it is an Africhem facility.
+
+The eight country flags in `public/flags/` are the 4:3 SVG assets from [flag-icons](https://github.com/lipis/flag-icons/tree/main/flags/4x3), retrieved 24 October 2026. The project is MIT licensed; its license text is preserved at `public/flags/LICENSE.txt`. No runtime flag package was added.

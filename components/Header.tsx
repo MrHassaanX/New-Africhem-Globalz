@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { m } from "motion/react";
 import { navigation } from "@/lib/site";
+import { QuoteLink } from "@/components/QuoteLink";
 
 const subscribe = (callback: () => void) => {
   window.addEventListener("africhem-theme", callback);
@@ -21,7 +22,7 @@ export function Header() {
   const trigger = useRef<HTMLButtonElement>(null);
   const header = useRef<HTMLElement>(null);
   const dark = useSyncExternalStore(subscribe, getTheme, serverTheme);
-  const isActive = (href: string) => pathname === href || (href === "/categories" && pathname.startsWith("/categories/"));
+  const isActive = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
   function unlock() { document.documentElement.removeAttribute("data-menu-open"); window.dispatchEvent(new CustomEvent("africhem-menu", { detail: false })); }
   function open() { dialog.current?.showModal(); document.documentElement.dataset.menuOpen = "true"; window.dispatchEvent(new CustomEvent("africhem-menu", { detail: true })); }
   function close() { dialog.current?.close(); unlock(); trigger.current?.focus(); }
@@ -52,7 +53,7 @@ export function Header() {
     )}</nav>
     <div className="header-actions">
       <button className="theme-button" onClick={toggleTheme} aria-label={dark ? "Switch to light theme" : "Switch to dark theme"} aria-pressed={dark}><span aria-hidden="true">{dark ? "☼" : "◐"}</span></button>
-      <Link className="enquire" href="/contact">Enquire <span aria-hidden="true">↗</span></Link>
+      <QuoteLink className="header-quote" />
       <button className="menu-button" ref={trigger} onClick={open} aria-label="Open navigation" aria-haspopup="dialog">Menu <span aria-hidden="true">☰</span></button>
     </div>
     <dialog data-lenis-prevent onClose={unlock} ref={dialog} className="mobile-menu" aria-label="Navigation" onClick={e => { if (e.target === dialog.current) close(); }}>
@@ -63,6 +64,7 @@ export function Header() {
             <Link href={item.href} onClick={close} aria-current={isActive(item.href) ? "page" : undefined}><span>0{i + 1}</span>{item.label}<span aria-hidden="true">↗</span></Link>
           </m.div>
         )}</nav>
+        <QuoteLink className="menu-quote" />
         <p>Chemical sourcing, trading<br />and distribution.</p>
       </div>
     </dialog>

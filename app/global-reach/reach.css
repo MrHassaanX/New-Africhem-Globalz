@@ -54,7 +54,8 @@
 .reach-partners-heading > div .reach-partners-statement { color: var(--ink); font: 460 clamp(24px, 2.25vw, 36px)/1.2 var(--font-display), sans-serif; letter-spacing: -.04em; }
 .reach-partners-heading > div p:last-child { font-size: 14px; }
 .reach-country-list { list-style: none; margin: var(--section-space-sm) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 6vw; }
-.reach-country-list li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 18px; align-items: center; min-height: 106px; border-top: 1px solid var(--line); }
+.reach-country-list li { display: grid; grid-template-columns: 32px 40px minmax(0, 1fr) auto; gap: 15px; align-items: center; min-height: 106px; border-top: 1px solid var(--line); }
+.reach-country-list li img { width: 40px; height: 30px; object-fit: cover; border: 1px solid var(--line); }
 .reach-country-list li:nth-last-child(-n+2) { border-bottom: 1px solid var(--line); }
 .reach-country-list li span { color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .08em; }
 .reach-country-list li span:last-child { text-align: right; }
@@ -95,7 +96,8 @@
   .reach-partners-heading { display: block; }
   .reach-partners h2 { margin: 35px 0 25px; font-size: clamp(44px, 11vw, 52px); }
   .reach-country-list { grid-template-columns: 1fr; margin-top: 55px; }
-  .reach-country-list li { grid-template-columns: 27px minmax(0, 1fr) auto; gap: 10px; min-height: 84px; }
+  .reach-country-list li { grid-template-columns: 25px 34px minmax(0, 1fr) auto; gap: 9px; min-height: 84px; }
+  .reach-country-list li img { width: 34px; height: 25px; }
   .reach-country-list li:nth-last-child(2) { border-bottom: 0; }
   .reach-country-list li span:last-child { max-width: 75px; font-size: 8px; line-height: 1.4; }
   .reach-country-list li strong { font-size: clamp(25px, 7vw, 32px); }
@@ -141,3 +143,7 @@
   .reach-globe-intro { margin-top: 38px; }
   .reach-globe-intro h1 { font-size: 48px; }
 }
+.reach-destination { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 26px; }
+.reach-destination p { max-width: 55ch; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.55; }
+.reach-cta .quote-button { min-width: 0; padding: 13px 20px; border: 1px solid #e29317; }
+@media (max-width: 767px) { .reach-destination { display: block; } .reach-destination .quote-button { margin-top: 20px; } }

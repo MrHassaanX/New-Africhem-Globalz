@@ -12,7 +12,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     async function configure() {
       const current = ++generation;
       dispose?.(); dispose = undefined;
-      if (preference.matches || ["/privacy", "/terms"].includes(pathname)) return;
+      // Only the globe journey currently needs synchronized smooth scroll.
+      if (preference.matches || pathname !== "/global-reach") return;
       const [{ default: Lenis }, { gsap }, { ScrollTrigger }] = await Promise.all([
         import("lenis"), import("gsap"), import("gsap/ScrollTrigger"),
       ]);

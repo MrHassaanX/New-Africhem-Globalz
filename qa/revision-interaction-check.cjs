@@ -1,0 +1,22 @@
+const { chromium } = require("playwright");
+(async () => {
+  const browser = await chromium.launch({ channel: "msedge", headless: true });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
+  const issues = [];
+  await page.goto("http://127.0.0.1:3101/contact?category=thinners-and-white-spirit&product=white-spirit#quote");
+  if (await page.locator('select[name="category"]').inputValue() !== "thinners-and-white-spirit") issues.push("category context lost");
+  if (await page.locator('select[name="product"]').inputValue() !== "white-spirit") issues.push("product context lost");
+  await page.locator('input[name="name"]').fill("Buyer Test");
+  await page.getByRole("button", { name: /Request My Quote/ }).click();
+  if (await page.locator('[role="alert"]').count() < 2) issues.push("missing field errors");
+  if (await page.locator('input[name="name"]').inputValue() !== "Buyer Test") issues.push("form value lost after validation");
+  if (await page.locator('input[name="company"]').evaluate(element => document.activeElement === element) === false) issues.push("first invalid field not focused");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  if (!(await page.locator("dialog.mobile-menu").evaluate(element => element.open))) issues.push("mobile menu did not open");
+  if (await page.locator("dialog.mobile-menu a.quote-button").count() !== 1) issues.push("quote action missing from menu");
+  await page.getByRole("button", { name: "Close navigation" }).click();
+  if (await page.locator("dialog.mobile-menu").evaluate(element => element.open)) issues.push("mobile menu did not close");
+  await browser.close();
+  console.log(JSON.stringify({ issues }, null, 2));
+  if (issues.length) process.exitCode = 1;
+})().catch(error => { console.error(error); process.exitCode = 1; });

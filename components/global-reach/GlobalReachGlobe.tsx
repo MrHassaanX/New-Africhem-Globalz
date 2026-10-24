@@ -64,8 +64,9 @@ export function GlobalReachGlobe() {
             scrub: .65,
             invalidateOnRefresh: true,
           } });
-          timeline.to(intro.current, { opacity: 0, y: -45, ease: "none", duration: .5 }, 0);
-          timeline.to(stage.current, { xPercent: () => window.innerWidth < 1100 ? -50 : -46.153846, ease: "none", duration: .8 }, .2);
+          // Keep the sphere inside its right-side column while the copy is readable.
+          timeline.to(intro.current, { opacity: 0, y: -45, ease: "none", duration: .35 }, 0);
+          timeline.to(stage.current, { xPercent: () => window.innerWidth < 1100 ? -50 : -46.153846, ease: "none", duration: .6 }, .4);
         });
       }, journey.current);
       revert = () => { responsive?.revert(); context.revert(); };

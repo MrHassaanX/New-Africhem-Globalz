@@ -2,66 +2,28 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { clientContent } from "@/lib/content/company";
-import { ProcessRows } from "@/components/content/ProcessRows";
-import { PillarRows } from "@/components/content/PillarRows";
+import { companyIdentity, founderProfile } from "@/lib/verified-content";
+import { BuyerSteps } from "@/components/BuyerSteps";
+import { QuoteLink } from "@/components/QuoteLink";
 import "./about.css";
-
-export const metadata: Metadata = {
-  title: "About Us",
-  description: clientContent.brand.promise + " " + clientContent.brand.delivery,
-  alternates: { canonical: "/about" },
-};
-
-const promise = clientContent.brand.promise.toUpperCase();
-const headingBreak = promise.lastIndexOf(" IS ");
-
-export default function AboutPage() {
-  return <article className="about-page">
-    <section className="about-hero wrap" aria-labelledby="about-title">
-      <div className="about-topline"><span>AFRICHEM GLOBALZ / ABOUT US</span><span>{clientContent.brand.tagline.toUpperCase()}</span></div>
-      <div className="about-hero-main">
-        <p className="about-label">BUILT AROUND THE RESULT</p>
-        <h1 id="about-title">{promise.slice(0, headingBreak)}<br /><span>{promise.slice(headingBreak + 1)}</span></h1>
-        <div className="about-hero-foot"><strong>{clientContent.brand.tagline.toUpperCase()}</strong><p>{clientContent.brand.delivery}</p></div>
-      </div>
-    </section>
-
-    <section className="about-story wrap" aria-labelledby="about-story-title">
-      <p className="about-section-index">01 / OUR STORY</p>
-      <div className="about-story-main"><h2 id="about-story-title">Why we<br />started.</h2><div>{clientContent.story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></div>
-    </section>
-
-    <figure className="about-context-image wrap"><div><Image src="/stock/port-logistics.webp" alt="Port cranes and vessels at dusk, illustrating international logistics" fill sizes="(max-width: 767px) 100vw, 90vw" /></div><figcaption>Illustrative industry photography · Global logistics</figcaption></figure>
-
-    <section className="about-strengths" aria-labelledby="about-strengths-title"><div className="wrap">
-      <div className="about-section-head"><p className="about-section-index">02 / WHY CHOOSE US</p><h2 id="about-strengths-title">The work<br /><span>behind the word.</span></h2></div>
-      <ol className="about-strength-list">{clientContent.whyChooseUs.map((item, index) => <li key={item.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3><p>{item.description}</p></li>)}</ol>
-    </div></section>
-
-    <section className="about-principle" aria-label="Client-first principle"><div className="wrap"><p className="about-section-index">OUR FIRST PRINCIPLE</p><blockquote>{clientContent.clientFirst}</blockquote></div></section>
-
-    <section className="about-process wrap" aria-labelledby="about-process-title">
-      <div className="about-section-head"><p className="about-section-index">03 / HOW WE WORK</p><h2 id="about-process-title">From plan<br /><span>to delivery.</span></h2></div>
-      <ProcessRows listClassName="about-process-list" rowClassName="about-process-row" />
-    </section>
-
-    <section className="about-network" aria-labelledby="about-network-title"><div className="wrap">
-      <div className="about-section-head"><p className="about-section-index">04 / OUR GLOBAL NETWORK</p><h2 id="about-network-title">People on<br /><span>the ground.</span></h2></div>
-      <div className="about-network-copy"><p>{clientContent.network.overview}</p><p>{clientContent.network.support} {clientContent.network.detail}</p></div>
-      <ul className="about-country-list"><li className="about-country-primary">India · Primary country</li>{clientContent.network.countries.map((country) => <li key={country}>{country}</li>)}</ul>
-      <Link className="about-text-link" href="/global-reach">Explore Global Reach <span aria-hidden="true">↗</span></Link>
-    </div></section>
-
-    <section className="about-pillars wrap" aria-labelledby="about-pillars-title">
-      <div className="about-section-head"><p className="about-section-index">05 / OUR PILLARS</p><h2 id="about-pillars-title">Four areas.<br /><span>One commitment.</span></h2></div>
-      <PillarRows listClassName="about-pillar-list" rowClassName="about-pillar-row" />
-    </section>
-
-    <section className="about-values" aria-labelledby="about-values-title"><div className="wrap">
-      <div className="about-section-head"><p className="about-section-index">06 / WHAT WE STAND FOR</p><h2 id="about-values-title">What guides<br /><span>the work.</span></h2></div>
-      <ol className="about-value-list">{clientContent.values.map((value, index) => <li key={value.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{value.title}</h3><p>{value.description}</p></li>)}</ol>
-    </div></section>
-
-    <section className="about-close wrap"><p className="about-section-index">START A CONVERSATION</p><div><h2>Tell us what<br /><span>you need.</span></h2><Link href="/contact">Contact Africhem <span aria-hidden="true">↗</span></Link></div></section>
-  </article>;
-}
+export const metadata: Metadata = { title: "About", description: "Meet Africhem Globalz and its chemical sourcing approach, client-first principle and international partner network.", alternates: { canonical: "/about" } };
+const orderCare = [
+  { icon: "01", title: "Begin with the brief", text: "Tell us the product, specification, quantity and destination you need." },
+  { icon: "02", title: "Clarify the source", text: "We discuss available product information before preparing a specific quotation." },
+  { icon: "03", title: "Review documents", text: "List the quality and shipping documents you require so their availability can be confirmed." },
+  { icon: "04", title: "Plan the destination", text: "Packaging and delivery requirements are part of the same sourcing conversation." },
+  { icon: "05", title: "Keep contact clear", text: "Use the published phone, email or WhatsApp channels to follow up on your request." },
+] as const;
+export default function AboutPage() { return <article className="revision-page about-revision">
+  <header className="revision-hero wrap"><p className="revision-kicker">ABOUT AFRICHEM GLOBALZ</p><h1>Chemical sourcing, built around your requirement.</h1><p>We connect product enquiries with sourcing, specification discussions and destination planning. White Spirit and Thinner are currently named in the client source; other chemical families are open for requirement-led enquiries.</p><QuoteLink /></header>
+  <section className="about-client-first wrap"><p className="revision-kicker">OUR FIRST PRINCIPLE</p><blockquote>{clientContent.clientFirst}</blockquote></section>
+  <section className="revision-section wrap about-story"><div className="revision-section-head"><p className="revision-kicker">01 / OUR STORY</p><h2>Why we started.</h2></div><div><p>{clientContent.story[0]}</p><p>Our focus is a clear conversation about the material, the information behind it and the destination it needs to reach.</p></div><figure><div><Image src="/stock/port-logistics.webp" alt="Port cranes at dusk" fill sizes="(max-width: 767px) 100vw, 80vw" /></div><figcaption>Illustrative industry photography · Not an Africhem shipment</figcaption></figure></section>
+  <section className="revision-section wrap"><div className="revision-section-head"><p className="revision-kicker">02 / ORDER APPROACH</p><h2>How we protect your order.</h2></div><div className="about-care-grid">{orderCare.map(item => <article key={item.icon}><span aria-hidden="true">{item.icon}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></section>
+  {founderProfile.name && founderProfile.role && founderProfile.biography && <section className="revision-section wrap founder-section"><div className="revision-section-head"><p className="revision-kicker">03 / HUMAN CONTACT</p><h2>Meet the person behind Africhem Globalz.</h2></div>{founderProfile.portrait && <Image src={founderProfile.portrait} alt={founderProfile.name} width={320} height={400} />}<h3>{founderProfile.name}</h3><p>{founderProfile.role}</p><p>{founderProfile.biography}</p><a className="text-arrow" href="https://wa.me/916362830638">Business WhatsApp <span aria-hidden="true">↗</span></a>{founderProfile.linkedin && <a className="text-arrow" href={founderProfile.linkedin}>LinkedIn profile <span aria-hidden="true">↗</span></a>}</section>}
+  <section className="revision-section wrap"><div className="revision-section-head"><p className="revision-kicker">03 / THE BUYER JOURNEY</p><h2>From enquiry to delivery in three steps.</h2></div><BuyerSteps compact /></section>
+  <section className="revision-section wrap about-network"><div className="revision-section-head"><p className="revision-kicker">04 / GLOBAL NETWORK</p><h2>India and seven partner countries.</h2></div><p className="revision-lead">{clientContent.network.overview} The map points describe a network, not Africhem offices or verified shipping lanes.</p><Link className="text-arrow" href="/global-reach">Explore Global Reach <span aria-hidden="true">→</span></Link></section>
+  <section className="revision-section wrap about-other"><div className="revision-section-head"><p className="revision-kicker">05 / OTHER BUSINESSES</p><h2>Additional business areas.</h2></div><p className="revision-lead">Footwear distribution, Uganda agro-exports, recycling and other activities are presented separately from our chemical products.</p><Link className="text-arrow" href="/other-businesses">View Other Businesses <span aria-hidden="true">→</span></Link></section>
+  <section className="revision-section wrap"><div className="revision-section-head"><p className="revision-kicker">06 / VALUES</p><h2>What guides the work.</h2></div><div className="about-values-grid">{clientContent.values.map(value => <article key={value.title}><h3>{value.title}</h3><p>{value.description}</p></article>)}</div></section>
+  {companyIdentity.legalName && <section className="revision-section wrap"><h2>Business identity</h2><p>{companyIdentity.legalName}</p>{companyIdentity.registrationNumber && <p>Registration: {companyIdentity.registrationNumber}</p>}{companyIdentity.iec && <p>IEC: {companyIdentity.iec}</p>}{companyIdentity.gstin && <p>GSTIN: {companyIdentity.gstin}</p>}{companyIdentity.registeredAddress && <p>{companyIdentity.registeredAddress}</p>}</section>}
+  <section className="revision-closing wrap"><div><p className="revision-kicker">START A CONVERSATION</p><h2>Tell us the material and destination.</h2></div><QuoteLink /></section>
+</article>; }
