@@ -16,3 +16,8 @@ These photographs are illustrative stock imagery. They do not depict Africhem Gl
 The supplied Unsplash examples were considered during selection. The Pexels alternatives gave the site a consistent set of licensed, locally optimizable photographs with no prominent third-party branding in the final crops.
 
 The Home hero uses a still photograph because the available licensed industrial clips either showed a different process or required a multi-megabyte download for a short loop. The still preserves a realistic industrial setting without implying it is an Africhem facility.
+
+The eight country flags in `public/flags/` are the 4:3 SVG assets from [flag-icons](https://github.com/lipis/flag-icons/tree/main/flags/4x3), retrieved 24 October 2026. The project is MIT licensed; its license text is preserved at `public/flags/LICENSE.txt`. No runtime flag package was added.
+
+- The four globe Earth textures are generated from public-domain Natural Earth 1:110m boundaries (see `assets/geo/README.md`) by `qa/bake-globe-textures.py`. V2 deepened light ocean contrast and kept the same country geometry and coordinates.
+- `public/globe/preview-light-1440.webp`, `preview-light-390.webp`, `preview-1440.webp` and `preview-390.webp` are optimized captures of this project’s own interactive globe at the matching theme, initial orientation and viewport. They are loading posters, not a separate illustration or geographic source.

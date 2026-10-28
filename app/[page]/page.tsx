@@ -2,50 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { company } from "@/lib/site";
-import { clientContent } from "@/lib/content/company";
-import { ContactIcon } from "@/components/SocialLinks";
-import { phoneLink, socialLinks } from "@/lib/socials";
 const pages = {
-  contact: { title: "Let's talk.", label: "CONTACT / ENQUIRY", text: "Start with the details.", note: `Email or call ${clientContent.contact.phone} with your requirement.` },
-  privacy: { title: "Privacy policy.", label: "WEBSITE INFORMATION", text: "A foundation preview.", note: "This preview stores your selected theme locally and uses session storage to remember the introductory animation. No analytics, advertising trackers or website enquiry form are enabled. Email links open your email application. The full policy will be reviewed before launch." },
-  terms: { title: "Terms & conditions.", label: "WEBSITE INFORMATION", text: "Information for review.", note: "This is a development preview. Product listings and company pages are not complete. Confirm any product, specification or commercial terms directly with Africhem Globalz. Final website terms are pending review before launch." },
+  privacy: { title: "Privacy information", text: "This policy is under founder and legal review.", note: "This local preview stores your selected theme in browser storage and remembers the introductory animation for the session. The quotation form, when enabled, sends the details you provide to a configured business email address through an email provider. No analytics or advertising trackers are enabled. Retention and full processing terms require approval before public launch." },
+  terms: { title: "Terms of sale", text: "Commercial terms are confirmed with each quotation.", note: "This page is a development review, not an approved contract. Product grade, quantity, documents, payment, delivery, quotation validity, claims and any applicable transport conditions must be confirmed in the individual quotation. Final terms require founder and legal approval before public launch." },
 } as const;
 export const dynamicParams = false;
 export function generateStaticParams() { return Object.keys(pages).map(page => ({ page })); }
-export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
-  const { page } = await params;
-  const data = pages[page as keyof typeof pages];
-  return data ? { title: data.title.replace(/\.$/, ""), description: data.text, alternates: { canonical: "/" + page } } : {};
-}
-export default async function Page({ params }: { params: Promise<{ page: string }> }) {
-  const { page } = await params;
-  const data = pages[page as keyof typeof pages];
-  if (!data) notFound();
-  if (page === "contact") {
-    const channels = [socialLinks[3], phoneLink, socialLinks[2], socialLinks[0], socialLinks[1]];
-    const display = [clientContent.contact.email, clientContent.contact.phone, "Open WhatsApp chat", "LinkedIn homepage", "Instagram homepage"];
-    return <article className="contact-page wrap">
-      <div className="eyebrow-line"><p className="eyebrow">CONTACT / ENQUIRY</p><span className="review-label">AFRICHEM GLOBALZ</span></div>
-      <div className="contact-hero"><h1>Let&apos;s talk.</h1><p>Tell us the material, product or requirement you have in mind. We&apos;ll take the conversation from there.</p></div>
-      <div className="contact-grid"><div className="contact-intro"><p>DIRECT CONTACT</p><h2>Start with<br />the details.</h2><span>{data.note}</span></div>
-        <div className="contact-channel-list">{channels.map((channel, index) => <a className="contact-channel" key={channel.icon} href={channel.href}
-          aria-label={channel.label} target={channel.external ? "_blank" : undefined} rel={channel.external ? "noopener noreferrer" : undefined}>
-          <span className="contact-channel-icon"><ContactIcon name={channel.icon} /></span><span className="contact-channel-copy"><small>{channel.icon.toUpperCase()}</small><strong>{display[index]}</strong></span><span className="contact-channel-arrow" aria-hidden="true">↗</span>
-        </a>)}</div>
-      </div>
-      <p className="contact-platform-note">Africhem&apos;s LinkedIn and Instagram profile links are coming soon. Those icons currently open the platform homepages.</p>
-    </article>;
-  }
-  return <section className="route-foundation wrap">
-    <div className="eyebrow-line"><p className="eyebrow">{data.label}</p><span className="review-label">FOUNDATION PREVIEW</span></div>
-    <h1>{data.title}</h1><div className="route-detail"><h2>{data.text}</h2><div><p>{data.note}</p>
-    <div className={page === "contact" ? "contact-methods" : undefined}>
-      <a className="text-link" href={"mailto:" + company.email}>{company.email} <span aria-hidden="true">↗</span></a>
-      {page === "contact" && <>
-        <a className="text-link" href={"tel:" + clientContent.contact.phone}>{clientContent.contact.phone} <span aria-hidden="true">↗</span></a>
-        <a className="text-link" href={"https://" + clientContent.contact.website}>{clientContent.contact.website} <span aria-hidden="true">↗</span></a>
-      </>}
-    </div></div></div>
-    <Link className="back-link" href="/">← Back to the foundation</Link>
-  </section>;
-}
+export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> { const { page } = await params; const data = pages[page as keyof typeof pages]; return data ? { title: data.title, description: data.text, alternates: { canonical: `/${page}` } } : {}; }
+export default async function Page({ params }: { params: Promise<{ page: string }> }) { const { page } = await params; const data = pages[page as keyof typeof pages]; if (!data) notFound(); return <article className="revision-page"><header className="revision-hero wrap"><p className="revision-kicker">WEBSITE INFORMATION / REVIEW DRAFT</p><h1>{data.title}</h1><p>{data.text}</p></header><section className="revision-section wrap"><p className="revision-lead">{data.note}</p><p>Questions about this review? <a className="text-arrow" href={`mailto:${company.email}`}>{company.email} <span aria-hidden="true">↗</span></a></p><Link className="text-arrow" href="/contact">Contact Africhem <span aria-hidden="true">→</span></Link></section></article>; }

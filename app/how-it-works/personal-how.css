@@ -1,0 +1,15 @@
+.how-personal .revision-hero { border-bottom: 1px solid var(--line); }
+.how-personal .buyer-journey { position: relative; max-width: 1260px; margin-inline: auto; padding: clamp(65px,8vw,130px) var(--gutter); }
+.buyer-journey-line { position: absolute; top: 140px; bottom: 190px; left: calc(var(--gutter) + 17px); width: 2px; background: var(--line); }
+.buyer-journey-line span { display: block; width: 100%; height: 100%; transform-origin: top center; background: var(--cyan); }
+.buyer-journey ol { list-style: none; padding: 0; margin: 0; }
+.buyer-journey-step { display: grid; grid-template-columns: 100px minmax(0,1fr); gap: 30px; align-items: start; min-height: clamp(200px,22vw,280px); }
+.buyer-journey-step > span { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; background: var(--paper); border: 1px solid var(--cyan); border-radius: 50%; color: var(--cyan); font-size: 11px; font-weight: 700; }
+.buyer-journey-step h2 { max-width: 15ch; margin: 0 0 18px; font: 520 clamp(36px,4vw,60px)/1 var(--font-display),sans-serif; letter-spacing: -.05em; }
+.buyer-journey-step p { max-width: 47ch; margin: 0; color: var(--muted); font-size: clamp(17px,1.5vw,21px); line-height: 1.55; }
+.buyer-journey-end { padding-left: 130px; }
+@media(max-width:767px) { .how-personal .buyer-journey { padding-block: 65px; } .buyer-journey-line { left: calc(var(--gutter) + 16px); top: 70px; bottom: 170px; } .buyer-journey-step { grid-template-columns: 50px minmax(0,1fr); gap: 12px; min-height: 230px; } .buyer-journey-step h2 { font-size: clamp(35px,9vw,49px); } .buyer-journey-end { padding-left: 62px; } }
+@media(prefers-reduced-motion:reduce) { .buyer-journey-line span { transform: none !important; } .buyer-journey-step { transform: none !important; opacity: 1 !important; } }
+
+.how-personal .buyer-journey { background: var(--surface-cool); max-width: none; padding-inline: max(var(--gutter), calc((100vw - 1260px) / 2 + var(--gutter))); }
+.how-personal .buyer-journey-step > span { background: var(--surface-cool); }

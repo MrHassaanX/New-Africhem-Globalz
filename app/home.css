@@ -1,8 +1,8 @@
 .home-page {
-  --home-page-bg: #f2ece1;
-  --home-section-bg: #f7f2e9;
-  --home-section-bg-alt: #eae2d5;
-  --home-section-bg-elevated: #e3d9ca;
+  --home-page-bg: var(--surface-page);
+  --home-section-bg: var(--surface-warm);
+  --home-section-bg-alt: var(--surface-cool);
+  --home-section-bg-elevated: var(--surface-muted);
   --home-text-primary: #10283a;
   --home-text-secondary: #40545e;
   --home-border: #b7c1bc;
@@ -13,10 +13,10 @@
   color: var(--home-text-primary);
 }
 [data-theme="dark"] .home-page {
-  --home-page-bg: #06111a;
-  --home-section-bg: #081c29;
-  --home-section-bg-alt: #0b2231;
-  --home-section-bg-elevated: #0e2a39;
+  --home-page-bg: var(--surface-page);
+  --home-section-bg: var(--surface-warm);
+  --home-section-bg-alt: var(--surface-cool);
+  --home-section-bg-elevated: var(--surface-muted);
   --home-text-primary: #f2f5f4;
   --home-text-secondary: #aab9b8;
   --home-border: #30414d;

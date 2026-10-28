@@ -1,0 +1,10 @@
+.revision-page .revision-hero { background: radial-gradient(ellipse at 78% 28%, color-mix(in srgb,var(--blue) 5%,transparent), transparent 45%); }
+.revision-page .revision-hero h1 { font-weight: 580; letter-spacing: -.05em; }
+.business-card,.about-care-grid article { transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s; }
+.business-card:hover,.about-care-grid article:hover { transform: translateY(-5px); box-shadow: 0 20px 45px #06111a19; border-color: var(--cyan); }
+.business-card-art img { transition: transform .7s var(--ease); }
+.business-card:hover .business-card-art img { transform: scale(1.035); }
+.about-story figure img { transition: transform .9s var(--ease); }
+.about-story figure:hover img { transform: scale(1.025); }
+@media(prefers-reduced-motion:no-preference) { .revision-page .revision-hero > * { animation: editorial-enter .7s var(--ease) both; } .revision-page .revision-hero > *:nth-child(2) { animation-delay: .08s; } .revision-page .revision-hero > *:nth-child(3) { animation-delay: .15s; } @keyframes editorial-enter { from { opacity:.65; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } } }
+@media(prefers-reduced-motion:reduce) { .business-card,.about-care-grid article,.business-card-art img,.about-story figure img { transition:none; } }

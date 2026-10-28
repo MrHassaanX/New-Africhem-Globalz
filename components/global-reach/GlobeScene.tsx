@@ -1,11 +1,11 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState, type PointerEvent, type KeyboardEvent } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type PointerEvent, type KeyboardEvent } from "react";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { networkArcs, networkLocations, type Coordinate } from "@/lib/globe/locations";
 
-type Props = { active: boolean; reducedMotion: boolean; onSelectionChange: (index: number | null) => void };
+type Props = { dark: boolean; active: boolean; reducedMotion: boolean; onSelectionChange: (index: number | null) => void };
 type RotationControl = { yaw: number; velocity: number; dragging: boolean; resumeAt: number; autoBlend: number };
 const revolutionSeconds = 42;
 
@@ -21,16 +21,16 @@ function createRoutes() {
     const end = onSphere(networkLocations[to].coordinate, 1);
     const path = Array.from({ length: 49 }, (_, index) => {
       const t = index / 48;
-      return start.clone().lerp(end, t).normalize().multiplyScalar(1.54 + .12 * Math.sin(Math.PI * t));
+      return start.clone().lerp(end, t).normalize().multiplyScalar(1.535 + .11 * Math.sin(Math.PI * t));
     });
     const curve = new THREE.CatmullRomCurve3(path);
-    return { curve, geometry: new THREE.TubeGeometry(curve, 48, .0035, 3, false) };
+    return { curve, geometry: new THREE.TubeGeometry(curve, 48, .0055, 4, false) };
   });
 }
 
 function GlobeObject({ active, reducedMotion, mobile, dark, getControl, select }: Props & { mobile: boolean; dark: boolean; getControl: () => RotationControl; select: (index: number) => void }) {
   const globe = useRef<THREE.Group>(null);
-  const firstFrame = useRef(false);
+  const firstFrame = useRef<string | null>(null);
   const elapsed = useRef(0);
   const routeMaterials = useRef<Array<THREE.MeshBasicMaterial | null>>([]);
   const halos = useRef<Array<THREE.Mesh | null>>([]);
@@ -74,7 +74,7 @@ function GlobeObject({ active, reducedMotion, mobile, dark, getControl, select }
     const reveal = reducedMotion ? 1 : Math.min(1, time / 1.5);
     routes.forEach((_, index) => {
       const material = routeMaterials.current[index];
-      if (material) material.opacity = reveal * (dark ? .57 : .5);
+      if (material) material.opacity = reveal * (dark ? .82 : .74);
     });
     halos.current.forEach((halo, index) => {
       if (halo) halo.scale.setScalar(reducedMotion ? 1 : 1 + Math.sin(time * 1.7 + index * 1.6) * .14);
@@ -83,26 +83,31 @@ function GlobeObject({ active, reducedMotion, mobile, dark, getControl, select }
 
   return <group ref={globe} rotation={[-.07, -1, 0]}>
     <mesh onAfterRender={() => {
-      if (firstFrame.current) return;
-      firstFrame.current = true;
-      requestAnimationFrame(() => requestAnimationFrame(() => window.dispatchEvent(new Event("africhem-globe-ready"))));
+      const renderedTheme = dark ? "dark" : "light";
+      if (firstFrame.current === renderedTheme) return;
+      firstFrame.current = renderedTheme;
+      requestAnimationFrame(() => requestAnimationFrame(() => window.dispatchEvent(new CustomEvent("africhem-globe-ready", { detail: { theme: renderedTheme } }))));
     }}>
       <sphereGeometry args={[1.5, mobile ? 48 : 80, mobile ? 32 : 56]} />
       <meshPhysicalMaterial map={earthTexture} roughness={.68} metalness={.12} clearcoat={.24} clearcoatRoughness={.52} />
     </mesh>
     {routes.map(({ geometry }, index) => <group key={index}>
       <mesh geometry={geometry}>
-        <meshBasicMaterial ref={(material) => { routeMaterials.current[index] = material; }} color={dark ? "#E55852" : "#B83D39"} transparent opacity={0} depthWrite={false} />
+        <meshBasicMaterial ref={(material) => { routeMaterials.current[index] = material; }} color={dark ? "#d7635c" : "#b84d48"} transparent opacity={0} depthWrite={false} />
       </mesh>
     </group>)}
     {networkLocations.map(({ name, primary }, index) => <group key={name} position={points[index]} onClick={(event) => { event.stopPropagation(); select(index); }} onPointerOver={(event) => { event.stopPropagation(); select(index); }}>
       <mesh ref={(node) => { halos.current[index] = node; }}>
-        <sphereGeometry args={[primary ? .105 : mobile ? .065 : .07, 12, 12]} />
-        <meshBasicMaterial color={primary ? "#e7b999" : dark ? "#5cbdd5" : "#3d90a9"} transparent opacity={primary ? .4 : .26} depthWrite={false} />
+        <sphereGeometry args={[primary ? .067 : mobile ? .048 : .05, 12, 12]} />
+        <meshBasicMaterial color={primary ? "#e7b999" : dark ? "#5cbdd5" : "#3d90a9"} transparent opacity={primary ? .28 : .18} depthWrite={false} />
       </mesh>
       <mesh>
-        <sphereGeometry args={[primary ? .035 : mobile ? .023 : .026, 12, 12]} />
+        <sphereGeometry args={[primary ? .033 : mobile ? .023 : .025, 12, 12]} />
         <meshBasicMaterial color={primary ? "#f2d7c1" : dark ? "#d6f5fa" : "#e8faf9"} />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[primary ? .13 : .105, 10, 10]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
     </group>)}
     <mesh scale={1.045} renderOrder={2}>
@@ -132,17 +137,16 @@ export default function GlobeScene(props: Props) {
   const [dragging, setDragging] = useState(false);
   const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 768);
   const [tablet, setTablet] = useState(() => typeof window !== "undefined" && window.innerWidth >= 768 && window.innerWidth < 1100);
-  const [dark, setDark] = useState(() => typeof document === "undefined" || document.documentElement.dataset.theme !== "light");
+  const dark = props.dark;
+  const registerInvalidate = useCallback((fn: () => void) => { invalidate.current = fn; }, []);
+  const getControl = useCallback(() => control.current, []);
   useEffect(() => {
     const update = () => {
       setMobile(window.innerWidth < 768);
       setTablet(window.innerWidth >= 768 && window.innerWidth < 1100);
-      setDark(document.documentElement.dataset.theme !== "light");
     };
     window.addEventListener("resize", update, { passive: true });
-    const observer = new MutationObserver(update);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => { window.removeEventListener("resize", update); observer.disconnect(); };
+    return () => { window.removeEventListener("resize", update); };
   }, []);
   function pointerDown(event: PointerEvent<HTMLDivElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -202,11 +206,11 @@ export default function GlobeScene(props: Props) {
     frameloop={!props.active || props.reducedMotion ? "demand" : "always"}
     camera={{ position: [0, .05, mobile ? 6.25 : tablet ? 6.8 : 5.15], fov: 39, near: .1, far: 20 }}
     gl={{ alpha: true, antialias: !mobile, powerPreference: "high-performance" }}>
-    <InvalidateBridge register={(fn) => { invalidate.current = fn; }} />
+    <InvalidateBridge register={registerInvalidate} />
     <ambientLight intensity={dark ? 1.25 : 1.4} color={dark ? "#b7dce7" : "#e6eef0"} />
     <directionalLight position={[-3, 3, 5]} intensity={dark ? 1.55 : 1.4} color={dark ? "#9cd5e6" : "#dce9ec"} />
     <directionalLight position={[3, -1, -2]} intensity={.7} color="#2d8fae" />
-    <Suspense fallback={null}><GlobeObject {...props} mobile={mobile} dark={dark} getControl={() => control.current} select={props.onSelectionChange} /></Suspense>
+    <Suspense fallback={null}><GlobeObject {...props} mobile={mobile} dark={dark} getControl={getControl} select={props.onSelectionChange} /></Suspense>
   </Canvas>
   </div>;
 }

@@ -22,7 +22,7 @@ def rgb(value):
 
 
 def sea_gradient(width, height, dark):
-    stops = ("#092b42", "#0a3b56", "#071c31") if dark else ("#406b80", "#527d8d", "#2f566e")
+    stops = ("#092b42", "#0a3b56", "#071c31") if dark else ("#194e67", "#266b80", "#123f59")
     colors = [np.asarray(rgb(stop), dtype=np.float32) for stop in stops]
     # Canvas' linear gradient runs along the diagonal of the canvas.
     x = np.linspace(0, 1, width, dtype=np.float32)[None, :]
@@ -41,8 +41,8 @@ def bake(dark, mobile):
     width, height = (1024, 512) if mobile else (2048, 1024)
     image = sea_gradient(width, height, dark)
     draw = ImageDraw.Draw(image, "RGBA")
-    fill = (*rgb("#286a83" if dark else "#9db8bb"), 255)
-    line = (*rgb("#75cce1" if dark else "#ddeceb"), 115 if dark else 178)
+    fill = (*rgb("#286a83" if dark else "#9fc3c3"), 255)
+    line = (*rgb("#75cce1" if dark else "#e3f2ee"), 115 if dark else 178)
     for ring in RINGS:
         points = []
         previous_x = 0

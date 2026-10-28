@@ -18,16 +18,31 @@ export function GlobalReachGlobe() {
   const journey = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const intro = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
   const [painted, setPainted] = useState(false);
+  const [dark, setDark] = useState(() => typeof document !== "undefined" && document.documentElement.dataset.theme === "dark");
+  const theme = useRef(dark ? "dark" : "light");
   const [active, setActive] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
   const reducedMotion = Boolean(useReducedMotion());
 
   useEffect(() => {
-    const onPaint = () => setPainted(true);
+    const syncTheme = () => {
+      const next = document.documentElement.dataset.theme === "dark";
+      const name = next ? "dark" : "light";
+      if (theme.current !== name) {
+        theme.current = name;
+        setPainted(false);
+        setDark(next);
+      }
+    };
+    syncTheme();
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    const onPaint = (event: Event) => {
+      if ((event as CustomEvent<{ theme: string }>).detail?.theme === theme.current) setPainted(true);
+    };
     window.addEventListener("africhem-globe-ready", onPaint);
-    return () => window.removeEventListener("africhem-globe-ready", onPaint);
+    return () => { observer.disconnect(); window.removeEventListener("africhem-globe-ready", onPaint); };
   }, []);
 
   useEffect(() => {
@@ -37,7 +52,6 @@ export function GlobalReachGlobe() {
     const update = () => setActive(visible && !document.hidden);
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
-      if (visible) setReady(true);
       update();
     }, { rootMargin: "260px" });
     observer.observe(element);
@@ -64,8 +78,8 @@ export function GlobalReachGlobe() {
             scrub: .65,
             invalidateOnRefresh: true,
           } });
-          timeline.to(intro.current, { opacity: 0, y: -45, ease: "none", duration: .5 }, 0);
-          timeline.to(stage.current, { xPercent: () => window.innerWidth < 1100 ? -50 : -46.153846, ease: "none", duration: .8 }, .2);
+          timeline.to(intro.current, { opacity: 0, y: -45, ease: "none", duration: .35 }, 0);
+          timeline.to(stage.current, { xPercent: () => window.innerWidth < 1100 ? -50 : -46.153846, ease: "none", duration: .6 }, .4);
         });
       }, journey.current);
       revert = () => { responsive?.revert(); context.revert(); };
@@ -83,10 +97,10 @@ export function GlobalReachGlobe() {
         <strong>{clientContent.network.overview}</strong>
         <span className="reach-globe-cue">Explore the network <span aria-hidden="true">↔</span></span>
       </div>
-      <div ref={stage} className="reach-globe-stage globe-stage">
+      <div ref={stage} className="reach-globe-stage globe-stage" data-painted={painted}>
         <div className="globe-atmosphere" aria-hidden="true" />
-        {!painted && <div className="globe-fallback" role="img" aria-label="Illustrated Earth" />}
-        {ready && <GlobeBoundary><GlobeScene active={active} reducedMotion={reducedMotion} onSelectionChange={setSelected} /></GlobeBoundary>}
+        <div className="globe-preview" aria-hidden="true" />
+        <GlobeBoundary><GlobeScene dark={dark} active={active} reducedMotion={reducedMotion} onSelectionChange={setSelected} /></GlobeBoundary>
       </div>
       <div className="reach-globe-hud">
         <div className="globe-selection" aria-live="polite">{selected === null ? "SELECT A POINT TO EXPLORE" : <><span>{networkLocations[selected].primary ? "PRIMARY COUNTRY · LAST EXPLORED" : "PARTNER COUNTRY · LAST EXPLORED"}</span><strong>{networkLocations[selected].name}</strong></>}</div>

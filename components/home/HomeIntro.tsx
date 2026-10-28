@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { clientContent } from "@/lib/content/company";
+import { QuoteLink } from "@/components/QuoteLink";
 
 export function HomeIntro({ children }: { children: React.ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
@@ -15,13 +15,15 @@ export function HomeIntro({ children }: { children: React.ReactNode }) {
     let context: { revert: () => void } | undefined;
     let responsive: { add: (query: string, callback: () => void) => unknown; revert: () => void } | undefined;
     let disposed = false;
+    let setupVersion = 0;
     let revealTimer: number | undefined;
     async function setup() {
+      const version = ++setupVersion;
       responsive?.revert(); responsive = undefined;
       context?.revert(); context = undefined;
       if (preference.matches) return;
       const [{ gsap }, { ScrollTrigger }] = await Promise.all([import("gsap"), import("gsap/ScrollTrigger")]);
-      if (disposed || preference.matches) return;
+      if (disposed || preference.matches || version !== setupVersion) return;
       gsap.registerPlugin(ScrollTrigger);
       context = gsap.context(() => {
         const heroCopy = introRoot.querySelector(".home-hero-copy");
@@ -60,24 +62,26 @@ export function HomeIntro({ children }: { children: React.ReactNode }) {
     }
     const change = () => { if (revealTimer) clearTimeout(revealTimer); void setup().catch(() => {}); };
     change(); preference.addEventListener("change", change);
-    return () => { disposed = true; if (revealTimer) clearTimeout(revealTimer); responsive?.revert(); context?.revert(); preference.removeEventListener("change", change); };
+    return () => { disposed = true; setupVersion++; if (revealTimer) clearTimeout(revealTimer); responsive?.revert(); context?.revert(); preference.removeEventListener("change", change); };
   }, []);
 
   return <div className="home-intro" ref={root}>
     <div className="home-material-stage" ref={stage} aria-hidden="true">
       <Image src="/stock/industrial-tanks-sunset.webp" alt="" fill preload sizes="(max-width: 767px) 100vw, 56vw" className="home-material-image" />
       <div className="home-material-wash" />
-      <p className="home-industrial-caption">PETROCHEMICALS <span> / </span> SOLVENTS &amp; THINNERS <span> / </span> DRUM FILLING</p>
+      <p className="home-industrial-caption">ILLUSTRATIVE INDUSTRY PHOTOGRAPHY · NOT AN AFRICHEM FACILITY</p>
     </div>
     <section className="home-hero" aria-labelledby="home-title">
       <div className="home-hero-copy">
-        <p className="home-hero-eyebrow">AFRICHEM GLOBALZ <span> / CHEMICAL EXPORT / SOLVENTS &amp; THINNERS</span></p>
+        <p className="home-hero-eyebrow">AFRICHEM GLOBALZ <span> / INDUSTRIAL CHEMICALS</span></p>
         <h1 id="home-title">
-          <span className="home-line"><span>SOURCING</span></span><span className="home-line home-line-accent"><span>SIMPLIFIED.</span></span>
+          <span className="home-line"><span>Industrial chemicals, </span></span>
+          <span className="home-line home-line-accent"><span>sourced, verified </span></span>
+          <span className="home-line"><span>and shipped to your port.</span></span>
         </h1>
-        <p className="home-hero-support"><strong>{clientContent.brand.promise}</strong><br />{clientContent.brand.delivery}</p>
-        <div className="home-hero-actions"><Link className="home-primary-link" href="/categories">Explore Categories <span aria-hidden="true">↗</span></Link><Link className="home-secondary-link" href="/contact">Send an Enquiry <span aria-hidden="true">↗</span></Link></div>
-        <span className="home-scroll-cue" aria-hidden="true">SCROLL TO EXPLORE <span>↓</span></span>
+        <p className="home-tagline">SOURCING SIMPLIFIED.</p>
+        <p className="home-hero-support">Tell us the material, specification, quantity and destination. We coordinate the sourcing conversation, available documents and delivery requirements before quoting.</p>
+        <div className="home-hero-actions"><QuoteLink /><Link className="home-secondary-link" href="/how-it-works">See How It Works <span aria-hidden="true">→</span></Link></div>
       </div>
       <div className="home-hero-visual-space" aria-hidden="true" />
     </section>

@@ -3,7 +3,7 @@ import { HomePage } from "@/components/home/HomePage";
 
 export const metadata: Metadata = {
   title: "Africhem Globalz — Sourcing Simplified",
-  description: "Africhem Globalz plans, sources and sees supply through to delivery.",
+  description: "Industrial chemical sourcing across five families, with quotation enquiries based on material, specification, quantity and destination.",
   alternates: { canonical: "/" },
 };
 

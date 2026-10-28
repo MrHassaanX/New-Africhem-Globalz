@@ -17,7 +17,7 @@ button:focus-visible, a:focus-visible, main:focus-visible { outline: 2px solid v
 .header.is-scrolled { background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(18px); border-color: var(--line); }
 .brand { flex-shrink: 0; display: flex; width: 190px; position: relative; isolation: isolate; }
 .brand img { position: relative; z-index: 1; width: 100%; height: auto; }
-[data-theme="dark"] .brand::before { content: ""; position: absolute; z-index: 0; inset: -10px -17px; border-radius: 50%; background: radial-gradient(ellipse at 26% 50%, rgba(225,240,240,.33), rgba(90,170,185,.1) 49%, transparent 75%); filter: blur(9px); pointer-events: none; }
+[data-theme="dark"] .brand { box-sizing: border-box; padding: 8px 10px; background: #c9d9dd; }
 .desktop-nav { display: flex; justify-content: center; align-items: center; gap: clamp(18px, 2vw, 36px); flex: 1; }
 .desktop-nav a { position: relative; font-size: 13px; padding-block: 14px; white-space: nowrap; }
 .desktop-nav a::after { position: absolute; content: ""; height: 2px; width: 16px; background: var(--cyan); bottom: 5px; left: calc(50% - 8px); transform: scaleX(0); transition: transform .25s var(--ease); }
@@ -200,3 +200,22 @@ html[data-menu-open="true"], html[data-menu-open="true"] body { overflow: hidden
 .study-caption, .study-copy > .eyebrow, .study-bottom, .swatch-names, .review-label, .eyebrow-line > .eyebrow { font-size: 11px; }
 .study-caption { flex-wrap: wrap; }
 @media(max-width: 374px) { .eyebrow-line { flex-wrap: wrap; gap: 8px; } }
+
+/* The revision's shared buyer controls and canonical page language. */
+.quote-button { display: inline-flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 52px; padding: 13px 20px; border: 1px solid #e29317; background: #f5a623; color: #0b2a5b; font-size: 15px; font-weight: 720; line-height: 1.2; white-space: nowrap; transition: background .2s ease, transform .2s ease; }
+.quote-button:hover { background: #ffd075; color: #0b2a5b; transform: translateY(-1px); }
+.quote-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.quote-button span { font-size: 20px; line-height: 1; }
+.text-arrow { display: inline-flex; align-items: center; justify-content: space-between; gap: 22px; min-height: 48px; padding: 8px 0; border-bottom: 1px solid currentColor; font-size: 15px; font-weight: 620; }
+.text-arrow:hover { color: var(--cyan); }
+.header-quote { min-height: 48px; padding: 10px 15px; font-size: 13px; }
+.menu-quote { margin-top: 24px; }
+.footer-site-nav { display: flex; flex-wrap: wrap; gap: 14px 22px; padding: 24px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.footer-site-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.footer-identity { color: var(--muted); font-size: 13px; }
+.footer-top > div > p:nth-of-type(2) { margin: 12px 0; font-size: 16px; }
+.footer-top .quote-button { margin-top: 16px; }
+.footer-name img { width: min(200px, 45vw); height: auto; }
+@media (max-width: 1350px) { .desktop-nav { gap: clamp(10px, 1.1vw, 20px); } .desktop-nav a { font-size: 12px; } .brand { width: 160px; } .header { gap: 16px; } }
+@media (max-width: 1199px) { .desktop-nav { display: none; } .menu-button { display: flex; } }
+@media (max-width: 767px) { .header-quote { display: none; } .mobile-menu nav a { padding-block: 13px; font-size: clamp(23px, 5vw, 30px); } .footer-site-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
